@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebGIS Kota Bandung</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> 
+    <!-- Link CSS dan Plugin Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css">
+    <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css' rel='stylesheet' />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.css" />
+    <link rel="stylesheet" href="https://balladaniel.github.io/leaflet-dataclassification/leaflet-dataclassification.css" />
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.fullscreen@1.6.0/Control.FullScreen.css" />
+
+    <!-- JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.js"></script>
+    <script src="https://balladaniel.github.io/leaflet-dataclassification/leaflet-dataclassification.js"></script>
+    
+</head>
+<body>
+    <!-- Header -->
+    <header id="navbar">
+        <div class="container">
+            <div class="logo">
+                <img src="asset/logo.png.png" alt="Logo" width="100">
+                <h1>WebGIS Kota Bandung</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#hero-section"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="#map-section"><i class="fas fa-map-marked-alt"></i> Map</a></li>
+                    <li><a href="#information-section"><i class="fas fa-info-circle"></i> Information</a></li>
+                    <li><a href="#author-section"><i class="fas fa-user"></i> Author</a></li>
+                    <li><a href="#footer"><i class="fas fa-envelope"></i> Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <div id="hero-section" class="hero-section">
+        <div class="hero-content">
+            <h1>WebGIS Informasi Spasial Kota Bandung</h1>
+            <p>Platform WebGIS untuk visualisasi data spasial Kota Bandung secara interaktif dan informatif.</p>
+        </div>
+    </div>
+
+    <!-- Map Section -->
+    <div id="map-section">
+        <h2>Peta Interaktif Kota Bandung</h2>
+        <p class="subtitle">Sajian peta tematik Kota Bandung dengan data spasial seperti tutupan lahan, batas wilayah, dan infrastruktur.</p>
+        <div id="map"></div>
+    </div>
+
+    <!-- Information Section -->
+    <div id="information-section">
+        <h2>Informasi Seputar Kota Bandung</h2>
+        <div class="container">
+            <div class="column">
+                <div class="data-item">
+                    <div class="slideshow-container">
+                        <img src="asset/kota bandung.jpg" alt="Tahura" class="slide active">
+                        <img src="asset/tahura 2.jpg" alt="Asia Afrika" class="slide">
+                        <img src="asset/lengkong kecil 2.jpeg" alt="Cibadak" class="slide">
+                    </div>
+                    <div class="description">
+                        <h3>Destinasi Wisata</h3>
+                        <p>Kota Bandung dikenal dengan berbagai destinasi wisata menarik, mulai dari wisata alam, sejarah, hingga kuliner.</p>
+                        <p><i class="fas fa-mountain"></i> Alam: <strong>Dusun Bambu, Babakan Siliwangi, Tahura</strong></p>
+                        <p><i class="fas fa-landmark"></i> Budaya & Sejarah: <strong>Gedung Sate, Museum Asia Afrika, Monumen Bandung Lautan Api</strong></p>
+                        <p><i class="fas fa-utensils"></i> Kuliner: <strong>Braga, Cibadak, Lengkong Kecil</strong></p>
+                        <p style="font-size: 0.9em; color: #555;">Sumber: <a href="https://www.disbudpar.bandung.go.id/" target="_blank">Disbudpar Kota Bandung</a></p>
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="data-item" id="weather-box">
+                    <img src="asset/prakiraan 2.jpeg" alt="Prakiraan Cuaca">
+                    <div class="description">
+                        <h3>Prakiraan Cuaca</h3>
+                        <p>Cuaca di Kota Bandung umumnya sejuk dengan curah hujan yang cukup tinggi, terutama pada musim penghujan. Informasi berikut memberikan update prakiraan cuaca terkini untuk membantu aktivitas Anda.</p>
+                        <p><i class="fas fa-thermometer-half"></i> Suhu: <span id="suhu">Memuat...</span></p>
+                        <p><i class="fas fa-tint"></i> Kelembapan: <span id="kelembapan">%</span></p>
+                        <p><i class="fas fa-wind"></i> Angin: <span id="angin">m/s</span></p>
+                        <p><i class="fas fa-clock"></i> Update: <span id="update">WIB</span></p>
+                        <p style="font-size: 0.9em; color: #555;">Sumber: <a href="https://openweathermap.org/" target="_blank">OpenWeatherMap</a></p>
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="data-item" id="description">
+                    <img src="asset/kepadatan penduduk.jpeg" alt="Kepadatan Penduduk">
+                    <div class="description">
+                        <h3>Kepadatan Penduduk</h3>
+                        <p>Kota Bandung merupakan salah satu kota terpadat di Indonesia. Dengan poulasi yang terus bertambah, kepadatan penduduk menjadi faktor penting dalam perencanaan tata ruang dan pembangunan kota.</p>
+                        <p><i class="fas fa-users"></i> Total Penduduk: <strong>2.5 juta jiwa</strong></p>
+                        <p><i class="fas fa-chart-area"></i> Kepadatan: <strong>15.000 jiwa/km²</strong></p>
+                        <p><i class="fas fa-city"></i> Kecamatan Terpadat: <strong>Batununggal</strong></p>
+                        <p><i class="fas fa-calendar-alt"></i> Update Terakhir: <strong>2023</strong></p>
+                        <p style="font-size: 0.9em; color: #555;">Sumber: <a href="https://bandungkota.bps.go.id" target="_blank">BPS Kota Bandung</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  <!-- Author Section -->
+    <div id="author-section">
+        <div class="author-content">
+            <h2>Tentang Pembuat</h2>
+            <img src="asset/PROFIL.JPG" alt="Profile Picture" class="profile-picture">
+            <div class="author-name">
+                <h3>Desti Meirisa Putri</h3>
+            </div>
+            <p style="text-align: center; max-width: 800px; margin: 0 auto; padding: 10px 20px;">
+  Mahasiswa semester 4 Program Studi Sains Informasi Geografi, Universitas Pendidikan Indonesia. Website ini dibuat sebagai tugas mata kuliah WebGIS.
+</p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+<div id="footer" style="background-color: #0093DD; color: white; padding: 40px 20px; text-align: center;">
+    <div class="contact-section">
+  <h2>Kontak Saya</h2>
+  <p><i class="fas fa-map-marker-alt"></i> Jl. Sindanglaya, Bandung</p>
+  <p><i class="fas fa-envelope"></i> destimeirisa30@upi.edu</p>
+  <p><i class="fas fa-phone"></i> 085317798357</p>
+  <div class="social-icons">
+    <a href="https://www.linkedin.com/in/desti-meirisa-4258232a8/" target="_blank"><i class="fab fa-linkedin"></i></a>
+    <a href="https://www.instagram.com/destiimp/" target="_blank"><i class="fab fa-instagram"></i></a>
+  </div>
+</div>
+</div>
+
+
+    <!-- JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.js"></script>
+    <script src="https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.js"></script>
+    <script src="https://balladaniel.github.io/leaflet-dataclassification/leaflet-dataclassification.js"></script>
+    <script src="script.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>
